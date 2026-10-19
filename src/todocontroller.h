@@ -24,8 +24,8 @@ class TodoController : public QObject {
   Q_INVOKABLE void addItem(const QString& text);
   Q_INVOKABLE void toggleRow(int row);
   Q_INVOKABLE void removeRow(int row);
-  Q_INVOKABLE void exportMarkdown();
-  Q_INVOKABLE void importFile();
+  Q_INVOKABLE void exportToPath(const QString& fileUrlOrPath);
+  Q_INVOKABLE void importFromPath(const QString& fileUrlOrPath);
   Q_INVOKABLE void pasteFromClipboard();
 
  signals:

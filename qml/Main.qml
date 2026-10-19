@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 ApplicationWindow {
     id: root
@@ -76,8 +77,8 @@ ApplicationWindow {
                 }
             }
             Item { Layout.fillWidth: true }
-            Button { text: "导出"; onClicked: Todo.exportMarkdown() }
-            Button { text: "导入"; onClicked: Todo.importFile() }
+            Button { text: "导出"; onClicked: exportDialog.open() }
+            Button { text: "导入"; onClicked: importDialog.open() }
             Button { text: "粘贴"; onClicked: Todo.pasteFromClipboard() }
         }
 
@@ -118,5 +119,22 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    FileDialog {
+        id: exportDialog
+        title: "导出 Markdown"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Markdown (*.md)", "所有文件 (*)"]
+        defaultFileName: "todos.md"
+        onAccepted: Todo.exportToPath(selectedFile)
+    }
+
+    FileDialog {
+        id: importDialog
+        title: "导入"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["JSON (*.json)", "Markdown (*.md)", "所有文件 (*)"]
+        onAccepted: Todo.importFromPath(selectedFile)
     }
 }

@@ -2,9 +2,15 @@
 
 #include <QClipboard>
 #include <QDate>
-#include <QFileDialog>
+#include <QFile>
 #include <QGuiApplication>
 #include <QUrl>
+
+static QString localPath(const QString& fileUrlOrPath) {
+  const QUrl u(fileUrlOrPath);
+  if (u.isValid() && u.scheme() == QLatin1String("file")) return u.toLocalFile();
+  return fileUrlOrPath;
+}
 
 TodoController::TodoController(QObject* parent) : QObject(parent) {
   store_.load();
@@ -73,10 +79,8 @@ void TodoController::removeRow(int row) {
   emit listChanged();
 }
 
-void TodoController::exportMarkdown() {
-  const QString path = QFileDialog::getSaveFileName(nullptr, QStringLiteral("导出 Markdown"),
-                                                    QStringLiteral("todos.md"),
-                                                    QStringLiteral("Markdown (*.md);;所有文件 (*.*)"));
+void TodoController::exportToPath(const QString& fileUrlOrPath) {
+  const QString path = localPath(fileUrlOrPath);
   if (path.isEmpty()) return;
   QFile f(path);
   if (!f.open(QIODevice::WriteOnly)) {
@@ -87,10 +91,8 @@ void TodoController::exportMarkdown() {
   emit message(QStringLiteral("已导出"));
 }
 
-void TodoController::importFile() {
-  const QString path = QFileDialog::getOpenFileName(
-      nullptr, QStringLiteral("导入"), {},
-      QStringLiteral("JSON (*.json);;Markdown (*.md);;所有文件 (*.*)"));
+void TodoController::importFromPath(const QString& fileUrlOrPath) {
+  const QString path = localPath(fileUrlOrPath);
   if (path.isEmpty()) return;
   if (path.endsWith(QStringLiteral(".json"), Qt::CaseInsensitive)) {
     store_.replaceFromJsonFile(path);

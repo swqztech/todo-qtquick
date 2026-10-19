@@ -9,7 +9,7 @@ if(MSVC)
   add_compile_options(/utf-8)
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Quick Qml QuickControls2 Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Quick Qml QuickControls2)
 
 qt_add_executable(todo-qtquick
   src/main.cpp
@@ -25,7 +25,7 @@ qt_add_qml_module(todo-qtquick
   QML_FILES qml/Main.qml
 )
 
-target_link_libraries(todo-qtquick PRIVATE Qt6::Quick Qt6::Qml Qt6::QuickControls2 Qt6::Widgets)
+target_link_libraries(todo-qtquick PRIVATE Qt6::Quick Qt6::Qml Qt6::QuickControls2)
 
 if(WIN32)
   set_target_properties(todo-qtquick PROPERTIES WIN32_EXECUTABLE ON OUTPUT_NAME "todo-qtquick")
